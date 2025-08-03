@@ -13,183 +13,20 @@
     </header>
 
     <main>
-        <section class="bg-gray-800 p-4 rounded-xl shadow">
-            <h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Binary Search</h2>
-            <pre class="overflow-auto">
-                <code class="text-sm text-white">
-        int binarySearch(int arr[], int n, int target) {
-            int low = 0, high = n - 1;
-            while (low <= high) {
-                int mid = (low + high) / 2;
-                if (arr[mid] == target)
-                    return mid;
-                else if (arr[mid] < target)
-                    low = mid + 1;
-                else
-                    high = mid - 1;
-            }
-            return -1;
-        }
-                </code>
-            </pre>
-        </section>
-
-
-        <section class="bg-gray-800 p-4 rounded-xl shadow">
-        <h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Disjoint Set Union</h2>
-        <pre class="overflow-auto">
-            <code class="text-sm text-white">
-        class DisjointSet {
-            List&lt;Integer&gt; parent = new ArrayList&lt;&gt;();
-            List&lt;Integer&gt; size = new ArrayList&lt;&gt;();
-            List&lt;Integer&gt; rank = new ArrayList&lt;&gt;();
-
-            DisjointSet(int n) {
-                for (int i = 0; i &lt; n; i++) {
-                    parent.add(i);
-                    size.add(1);
-                    rank.add(1);
-                }
-            }
-
-            int findUPar(int node) {
-                if (parent.get(node) == node) return node;
-                int ulp = findUPar(parent.get(node));
-                parent.set(node, ulp);
-                return parent.get(node);
-            }
-
-            void unionBySize(int u, int v) {
-                int ulp_u = findUPar(u);
-                int ulp_v = findUPar(v);
-                if (ulp_u == ulp_v) return;
-
-                if (size.get(ulp_u) &lt; size.get(ulp_v)) {
-                    parent.set(ulp_u, ulp_v);
-                    size.set(ulp_v, size.get(ulp_u) + size.get(ulp_v));
-                } else {
-                    parent.set(ulp_v, ulp_u);
-                    size.set(ulp_u, size.get(ulp_u) + size.get(ulp_v));
-                }
-            }
-
-            void unionByRank(int u, int v) {
-                int ulp_u = findUPar(u);
-                int ulp_v = findUPar(v);
-                if (ulp_u == ulp_v) return;
-
-                if (rank.get(ulp_u) &lt; rank.get(ulp_v)) {
-                    parent.set(ulp_u, ulp_v);
-                } else if (rank.get(ulp_u) &gt; rank.get(ulp_v)) {
-                    parent.set(ulp_v, ulp_u);
-                } else {
-                    parent.set(ulp_v, ulp_u);
-                    rank.set(ulp_u, rank.get(ulp_u) + 1);
-                }
-            }
-        }
-            </code>
-        </pre>
-        </section>
-
-
-        <section class="bg-gray-800 p-4 rounded-xl shadow">
-        <h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Segment Tree</h2>
-        <pre class="overflow-auto">
-            <code class="text-sm text-white">
-        class SegmentTree{
-            int n;
-            int seg[];
-            SegmentTree(int n){
-                this.n = n;
-                seg = new int[4*n];
-            }
-            public void build(int ind, int low, int high, int arr[]){
-                if(low == high){
-                    seg[ind] = arr[low];
-                    return;
-                }
-                int mid = (low + high) &gt;&gt; 1;
-                build(2*ind + 1, low, mid, arr);
-                build(2*ind + 2, mid +1, high, arr);
-                seg[ind] = Math.min(seg[2*ind + 1], seg[2*ind + 2]);
-            }
-            public int query(int ind, int low, int high, int l, int r){
-                if(r &lt; low || l &gt; high) return Integer.MAX_VALUE;
-                if(l &lt;= low && high &lt;= r) return seg[ind];
-
-                int mid = (low + high) &gt;&gt; 1;
-                int left = query(2*ind + 1, low, mid, l, r);
-                int right = query(2*ind + 2, mid + 1, high, l, r);
-                return Math.min(left, right);
-            }
-            public void update(int ind, int low, int high, int i, int val){
-                if(low == high){
-                    seg[ind] = val;
-                    return;
-                }
-                int mid = (low + high) &gt;&gt; 1;
-                if(i &lt;= mid){
-                    update(2*ind + 1, low, mid, i, val);
-                }
-                else update(2*ind + 1, mid +1 ,high, i ,val);
-                seg[ind] = Math.min(seg[2*ind + 1], seg[2*ind + 2]);
-            }
-        }
-            </code>
-        </pre>
-        </section>
-
-        <section class="bg-gray-800 p-4 rounded-xl shadow">
-        <h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Fenwick Tree</h2>
-        <pre class="overflow-auto">
-            <code class="text-sm text-white">
-        class FenwickTree{
-            int N;
-            int fen[];
-            FenwickTree(int size){
-                N = size + 2;
-                fen = new int[N];
-            }
-            void update(int i, int val){
-                while(i&lt;N){
-                    fen[i] += val;
-                    i += (i & -i);
-                }
-            }
-            int sum(int i){
-                int s = 0;
-                while(i&gt;0){
-                    s += fen[i];
-                    i -= (i & -i);
-                }
-                return s;
-            }
-            int rangeSum(int l, int r){
-                return sum(r) - sum(l-1);
-            }
-
-            // smallest index such that prefix sum >= k
-            int prefixSum(int k){
-                int curr = 0, prevSum = 0;
-                for(int i=0;i&lt;N;i++){
-                    int next = curr + (1 &lt;&lt; i);
-                    if(next &lt; N && prevSum + fen[next] &lt; k){
-                        prevSum += fen[next];
-                        curr = next;
-                    }
-                }
-                return curr + 1;
-            }
-        }
-            </code>
-        </pre>
-        </section>
+        
+        <a href="searching.html" style="text-decoration: none;"><h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Searching</h2></a>
+        <a href="graphs.html" style="text-decoration: none;"><h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Graphs</h2></a>
+        <a href="segment_tree.html" style="text-decoration: none;"><h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Segment Tree</h2></a>
+        <a href="fenwick_tree.html" style="text-decoration: none;"><h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Fenwick Tree</h2></a>
+        
+        
+        
+        
 
 
     </main>
 
-    <footer class="text-center py-4 text-gray-500 text-sm border-t border-gray-700">
+    <footer class="text-center py-4 text-gray-500 text-sm border-t border-gray-700 mx-auto">
         &copy; 2025 Harshit Harlalka. All rights reserved.
   </footer>
 </body>
