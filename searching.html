@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DSA Algorithms</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+
+  <!-- Prism.js core + Java language support -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
 </head>
 <body class="bg-gray-900 text-gray-100 font-mono">
     <header class="text-center py-6 bg-gray-900 shadow-md">
@@ -15,8 +20,8 @@
     <main>
         <section class="bg-gray-800 p-4 rounded-xl shadow">
             <h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Binary Search</h2>
-            <pre class="overflow-auto">
-                <code class="text-sm text-white">
+            <pre class="overflow-auto" class="language-java">
+                <code class="text-sm text-white language-java">
         int binarySearch(int arr[], int n, int target) {
             int low = 0, high = n - 1;
             while (low <= high) {
