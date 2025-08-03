@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Algorithms</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 font-mono">
+    <header class="text-center py-6 bg-gray-900 shadow-md">
+        <h1 class="text-3xl font-bold">DSA Algorithms</h1>
+        <p class="text-sm text-gray-400">A simple collection of essential data structures & algorithms</p>
+    </header>
+
+    <main>
+        
+
+        <section class="bg-gray-800 p-4 rounded-xl shadow">
+        <h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Fenwick Tree</h2>
+        <pre class="overflow-auto">
+            <code class="text-sm text-white">
+        class FenwickTree{
+            int N;
+            int fen[];
+            FenwickTree(int size){
+                N = size + 2;
+                fen = new int[N];
+            }
+            void update(int i, int val){
+                while(i&lt;N){
+                    fen[i] += val;
+                    i += (i & -i);
+                }
+            }
+            int sum(int i){
+                int s = 0;
+                while(i&gt;0){
+                    s += fen[i];
+                    i -= (i & -i);
+                }
+                return s;
+            }
+            int rangeSum(int l, int r){
+                return sum(r) - sum(l-1);
+            }
+
+            // smallest index such that prefix sum >= k
+            int prefixSum(int k){
+                int curr = 0, prevSum = 0;
+                for(int i=0;i&lt;N;i++){
+                    int next = curr + (1 &lt;&lt; i);
+                    if(next &lt; N && prevSum + fen[next] &lt; k){
+                        prevSum += fen[next];
+                        curr = next;
+                    }
+                }
+                return curr + 1;
+            }
+        }
+            </code>
+        </pre>
+        </section>
+
+
+    </main>
+
+    <footer class="text-center py-4 text-gray-500 text-sm border-t border-gray-700">
+        &copy; 2025 Harshit Harlalka. All rights reserved.
+  </footer>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Algorithms</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 font-mono">
+    <header class="text-center py-6 bg-gray-900 shadow-md">
+        <h1 class="text-3xl font-bold">DSA Algorithms</h1>
+        <p class="text-sm text-gray-400">A simple collection of essential data structures & algorithms</p>
+    </header>
+
+    <main>
+        
+
+
+        <section class="bg-gray-800 p-4 rounded-xl shadow">
+        <h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Segment Tree</h2>
+        <pre class="overflow-auto">
+            <code class="text-sm text-white">
+        class SegmentTree{
+            int n;
+            int seg[];
+            SegmentTree(int n){
+                this.n = n;
+                seg = new int[4*n];
+            }
+            public void build(int ind, int low, int high, int arr[]){
+                if(low == high){
+                    seg[ind] = arr[low];
+                    return;
+                }
+                int mid = (low + high) &gt;&gt; 1;
+                build(2*ind + 1, low, mid, arr);
+                build(2*ind + 2, mid +1, high, arr);
+                seg[ind] = Math.min(seg[2*ind + 1], seg[2*ind + 2]);
+            }
+            public int query(int ind, int low, int high, int l, int r){
+                if(r &lt; low || l &gt; high) return Integer.MAX_VALUE;
+                if(l &lt;= low && high &lt;= r) return seg[ind];
+
+                int mid = (low + high) &gt;&gt; 1;
+                int left = query(2*ind + 1, low, mid, l, r);
+                int right = query(2*ind + 2, mid + 1, high, l, r);
+                return Math.min(left, right);
+            }
+            public void update(int ind, int low, int high, int i, int val){
+                if(low == high){
+                    seg[ind] = val;
+                    return;
+                }
+                int mid = (low + high) &gt;&gt; 1;
+                if(i &lt;= mid){
+                    update(2*ind + 1, low, mid, i, val);
+                }
+                else update(2*ind + 1, mid +1 ,high, i ,val);
+                seg[ind] = Math.min(seg[2*ind + 1], seg[2*ind + 2]);
+            }
+        }
+            </code>
+        </pre>
+        </section>
+
+        
+
+    </main>
+
+    <footer class="text-center py-4 text-gray-500 text-sm border-t border-gray-700">
+        &copy; 2025 Harshit Harlalka. All rights reserved.
+  </footer>
+</body>
+</html>

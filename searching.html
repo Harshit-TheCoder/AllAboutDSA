@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Algorithms</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 font-mono">
+    <header class="text-center py-6 bg-gray-900 shadow-md">
+        <h1 class="text-3xl font-bold">DSA Algorithms</h1>
+        <p class="text-sm text-gray-400">A simple collection of essential data structures & algorithms</p>
+    </header>
+
+    <main>
+        <section class="bg-gray-800 p-4 rounded-xl shadow">
+            <h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Binary Search</h2>
+            <pre class="overflow-auto">
+                <code class="text-sm text-white">
+        int binarySearch(int arr[], int n, int target) {
+            int low = 0, high = n - 1;
+            while (low <= high) {
+                int mid = (low + high) / 2;
+                if (arr[mid] == target)
+                    return mid;
+                else if (arr[mid] < target)
+                    low = mid + 1;
+                else
+                    high = mid - 1;
+            }
+            return -1;
+        }
+                </code>
+            </pre>
+        </section>
+
+
+        
+
+
+    </main>
+
+    <footer class="text-center py-4 text-gray-500 text-sm border-t border-gray-700">
+        &copy; 2025 Harshit Harlalka. All rights reserved.
+  </footer>
+</body>
+</html>
