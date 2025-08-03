@@ -92,6 +92,101 @@
         </pre>
         </section>
 
+
+        <section class="bg-gray-800 p-4 rounded-xl shadow">
+        <h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Segment Tree</h2>
+        <pre class="overflow-auto">
+            <code class="text-sm text-white">
+        class SegmentTree{
+            int n;
+            int seg[];
+            SegmentTree(int n){
+                this.n = n;
+                seg = new int[4*n];
+            }
+            public void build(int ind, int low, int high, int arr[]){
+                if(low == high){
+                    seg[ind] = arr[low];
+                    return;
+                }
+                int mid = (low + high) &gt;&gt; 1;
+                build(2*ind + 1, low, mid, arr);
+                build(2*ind + 2, mid +1, high, arr);
+                seg[ind] = Math.min(seg[2*ind + 1], seg[2*ind + 2]);
+            }
+            public int query(int ind, int low, int high, int l, int r){
+                if(r &lt; low || l &gt; high) return Integer.MAX_VALUE;
+                if(l &lt;= low && high &lt;= r) return seg[ind];
+
+                int mid = (low + high) &gt;&gt; 1;
+                int left = query(2*ind + 1, low, mid, l, r);
+                int right = query(2*ind + 2, mid + 1, high, l, r);
+                return Math.min(left, right);
+            }
+            public void update(int ind, int low, int high, int i, int val){
+                if(low == high){
+                    seg[ind] = val;
+                    return;
+                }
+                int mid = (low + high) &gt;&gt; 1;
+                if(i &lt;= mid){
+                    update(2*ind + 1, low, mid, i, val);
+                }
+                else update(2*ind + 1, mid +1 ,high, i ,val);
+                seg[ind] = Math.min(seg[2*ind + 1], seg[2*ind + 2]);
+            }
+        }
+            </code>
+        </pre>
+        </section>
+
+        <section class="bg-gray-800 p-4 rounded-xl shadow">
+        <h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Fenwick Tree</h2>
+        <pre class="overflow-auto">
+            <code class="text-sm text-white">
+        class FenwickTree{
+            int N;
+            int fen[];
+            FenwickTree(int size){
+                N = size + 2;
+                fen = new int[N];
+            }
+            void update(int i, int val){
+                while(i&lt;N){
+                    fen[i] += val;
+                    i += (i & -i);
+                }
+            }
+            int sum(int i){
+                int s = 0;
+                while(i&gt;0){
+                    s += fen[i];
+                    i -= (i & -i);
+                }
+                return s;
+            }
+            int rangeSum(int l, int r){
+                return sum(r) - sum(l-1);
+            }
+
+            // smallest index such that prefix sum >= k
+            int prefixSum(int k){
+                int curr = 0, prevSum = 0;
+                for(int i=0;i&lt;N;i++){
+                    int next = curr + (1 &lt;&lt; i);
+                    if(next &lt; N && prevSum + fen[next] &lt; k){
+                        prevSum += fen[next];
+                        curr = next;
+                    }
+                }
+                return curr + 1;
+            }
+        }
+            </code>
+        </pre>
+        </section>
+
+
     </main>
 
     <footer class="text-center py-4 text-gray-500 text-sm border-t border-gray-700">
