@@ -33,6 +33,65 @@
                 </code>
             </pre>
         </section>
+
+
+        <section class="bg-gray-800 p-4 rounded-xl shadow">
+        <h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Disjoint Set Union</h2>
+        <pre class="overflow-auto">
+            <code class="text-sm text-white">
+        class DisjointSet {
+            List&lt;Integer&gt; parent = new ArrayList&lt;&gt;();
+            List&lt;Integer&gt; size = new ArrayList&lt;&gt;();
+            List&lt;Integer&gt; rank = new ArrayList&lt;&gt;();
+
+            DisjointSet(int n) {
+                for (int i = 0; i &lt; n; i++) {
+                    parent.add(i);
+                    size.add(1);
+                    rank.add(1);
+                }
+            }
+
+            int findUPar(int node) {
+                if (parent.get(node) == node) return node;
+                int ulp = findUPar(parent.get(node));
+                parent.set(node, ulp);
+                return parent.get(node);
+            }
+
+            void unionBySize(int u, int v) {
+                int ulp_u = findUPar(u);
+                int ulp_v = findUPar(v);
+                if (ulp_u == ulp_v) return;
+
+                if (size.get(ulp_u) &lt; size.get(ulp_v)) {
+                    parent.set(ulp_u, ulp_v);
+                    size.set(ulp_v, size.get(ulp_u) + size.get(ulp_v));
+                } else {
+                    parent.set(ulp_v, ulp_u);
+                    size.set(ulp_u, size.get(ulp_u) + size.get(ulp_v));
+                }
+            }
+
+            void unionByRank(int u, int v) {
+                int ulp_u = findUPar(u);
+                int ulp_v = findUPar(v);
+                if (ulp_u == ulp_v) return;
+
+                if (rank.get(ulp_u) &lt; rank.get(ulp_v)) {
+                    parent.set(ulp_u, ulp_v);
+                } else if (rank.get(ulp_u) &gt; rank.get(ulp_v)) {
+                    parent.set(ulp_v, ulp_u);
+                } else {
+                    parent.set(ulp_v, ulp_u);
+                    rank.set(ulp_u, rank.get(ulp_u) + 1);
+                }
+            }
+        }
+            </code>
+        </pre>
+        </section>
+
     </main>
 
     <footer class="text-center py-4 text-gray-500 text-sm border-t border-gray-700">
