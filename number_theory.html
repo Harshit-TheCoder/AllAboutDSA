@@ -24,6 +24,7 @@
             <nav>
                 <a href="#ncr" style="text-decoration: none;"><h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 NCR Template</h2></a>
                 <a href="#matrix-exponentiation" style="text-decoration: none;"><h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Matrix Exponentiation</h2></a>
+                <a href="#seive" style="text-decoration: none;"><h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Seive of Eratosthenes</h2></a>
             </nav>
         </section>
     </main>
@@ -103,6 +104,65 @@
                 return res;
             }
         }
+                </code>
+            </pre>
+        </section>
+
+        <section id="seive" class="bg-gray-800 p-4 rounded-xl shadow mt-10 w-full">
+            <h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Seive of Eratosthenes</h2>
+            <pre class="overflow-auto" class="language-java">
+                <code class="text-sm text-white language-java">
+        class SeiveOfEratosThenes{
+            static int sof[];
+            static boolean isPrime[];
+            static int n;
+            SeiveOfEratosThenes(int size){
+                n = size;
+                sof = new int[n+1];
+                isPrime = new boolean[n+1];
+                for(int i=0;i&lt;=n;i++){
+                    sof[i] = i;
+                    isPrime[i] = true;
+                } 
+
+                isPrime[0] = false;
+                isPrime[1] = false;
+                for(int i=2;i&lt;=n;i++){
+                    if(isPrime[i]){
+                        for(int j=i*i;j&lt;=n;j += i){
+                            isPrime[j] = false;
+                        }
+                    }
+                }
+
+                sof[0] = 0;
+                sof[1] = 1;
+                for(int i=2;i&lt;=n;i++){
+                    if(sof[i] == i){
+                        for(int j=i*i;j&lt;=n;j += i){
+                            if(sof[j] == j) sof[j] = i;
+                        }
+                    }
+                }
+            }
+
+            boolean checkPrime(int val){
+                return isPrime[val];
+            }
+
+            List&lt;Integer&gt; getPrimeDivisors(int val){
+                List&lt;Integer&gt; divisors = new ArrayList&lt;&gt;();
+                int temp = val;
+                while(temp &gt; 1){
+                    int d = sof[temp];
+                    divisors.add(d);
+                    temp /= d;
+                }
+                return divisors;
+            }
+        }
+
+    
                 </code>
             </pre>
         </section>

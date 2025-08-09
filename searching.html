@@ -23,6 +23,7 @@
             <h1 class="text-2xl font-bold">Topics Covered</h1>
             <nav>
                 <a href="#binary-search" style="text-decoration: none;"><h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Binary Search</h2></a>
+                <a href="#ternary-search" style="text-decoration: none;"><h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Ternary Search</h2></a>
             </nav>
         </section>
     </main>
@@ -45,6 +46,34 @@
             }
             return -1;
         }
+                </code>
+            </pre>
+        </section>
+
+        <section id="ternary-search" class="bg-gray-800 p-4 rounded-xl shadow w-full">
+            <h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Ternary Search</h2>
+            <pre class="overflow-auto" class="language-java">
+                <code class="text-sm text-white language-java">
+        int ternarySearch(int low, int high, int key, int arr[]) {
+            while (low &lt;= high) {
+                int mid1 = low + (high - low) / 3;
+                int mid2 = high - (high - low) / 3;
+
+                if (arr[mid1] == key) return mid1;
+                if (arr[mid2] == key) return mid2;
+
+                if (key &lt; arr[mid1]) {
+                    high = mid1 - 1;
+                } else if (key &gt; arr[mid2]) {
+                    low = mid2 + 1;
+                } else {
+                    low = mid1 + 1;
+                    high = mid2 - 1;
+                }
+            }
+            return -1;
+        }
+
                 </code>
             </pre>
         </section>

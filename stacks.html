@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Algorithms</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+
+  <!-- Prism.js core + Java language support -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 font-mono">
+    <header class="text-center py-6 bg-gray-900 shadow-md">
+        <h1 class="text-3xl font-bold">DSA Algorithms</h1>
+        <p class="text-sm text-gray-400">A simple collection of essential data structures & algorithms</p>
+    </header>
+
+    <main class="w-[80%] md: w-full sm: w-full flex flex-col mx-auto mb-10 px-10">
+        <a href="index.html" style="text-decoration: none;"><h2 class="text-xl font-semibold mb-2 text-cyan-400">Home</h2></a>
+        <section>
+            <h1 class="text-2xl font-bold">Topics Covered</h1>
+            <nav>
+                <a href="#lru-cache" style="text-decoration: none;"><h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍LRU Cache</h2></a>
+                <a href="#lfu-cache" style="text-decoration: none;"><h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍LFU Cache</h2></a>
+                <a href="#minstack" style="text-decoration: none;"><h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍MinStack</h2></a>
+            </nav>
+        </section>
+    </main>
+
+    <main class="w-[80%] md: w-full sm: w-full flex flex-col items-center mx-auto">
+        <section id="lru-cache" class="bg-gray-800 p-4 rounded-xl shadow w-full">
+            <h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 LRU Cache</h2>
+            <pre class="overflow-auto" class="language-java">
+                <code class="text-sm text-white language-java">
+        class LRUCache{
+            class Node{
+                int key, val;
+                Node next, prev;
+                Node(int key, int val){
+                    this.key = key;
+                    this.val = val;
+                    this.next = null;
+                    this.prev = null;
+                }
+            }
+
+            Node head = new Node(0,0);
+            Node tail = new Node(0,0);
+            Map&lt;Integer, Node&gt; map = new HashMap&lt;&gt;();
+            int capacity;
+
+            LRUCache(int capacity){
+                this.capacity = capacity;
+                head.next = tail;
+                tail.prev = head;
+            }
+
+            public void insert(Node node){
+                node.next = head.next;
+                head.next.prev = node;
+                node.prev = head;
+                head.next = node;
+            }
+
+            public void remove(Node node){
+                node.next.prev = node.prev;
+                node.prev.next = node.next;
+            }
+
+            public int  get(int key){
+                if(map.containsKey(key)){
+                    Node node = map.get(key);
+                    remove(node);
+                    insert(node);
+                    return node.val;
+                }
+                else return -1;
+            }
+
+            public void put(int key, int val){
+                if(map.containsKey(key)){
+                    Node node = map.get(key);
+                    node.val = val;
+                    remove(node);
+                    insert(node);
+                    return;
+                }
+                else if(map.size() &gt;= capacity){
+                    map.remove(tail.prev.key);
+                    remove(tail.prev);  
+                }
+                Node node = new Node(key, val);
+                insert(node);
+                map.put(key, node);
+            }
+        }
+
+                </code>
+            </pre>
+        </section>
+
+        <section id="lfu-cache" class="bg-gray-800 p-4 rounded-xl shadow w-full">
+            <h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 LFU Cache</h2>
+            <pre class="overflow-auto" class="language-java">
+                <code class="text-sm text-white language-java">
+        class LFUCache{
+    
+            class Node{
+                int key,val, freq;
+                Node next, prev;
+                Node(int key, int val){
+                    this.key = key;
+                    this.val = val;
+                    this.next = null;
+                    this.prev = null;
+                    freq = 1;
+                }
+            }
+
+            public class LRUList{
+                Node head = new Node(0, 0);
+                Node tail = new Node(0,0);
+                int size;
+
+                public LRUList(){
+                    this.size = 0;
+                    head.next = tail;
+                    tail.prev = head;
+                }
+
+                public void insert(Node node){
+                    node.next = head.next;
+                    head.next.prev = node;
+                    node.prev = head;
+                    head.next = node;
+                    size++;
+                }
+
+                public void remove(Node node){
+                    node.next.prev = node.prev;
+                    node.prev.next = node.next;
+                    size--;
+                }
+
+                public Node removeLRU(){
+                    Node lru = tail.prev;
+                    remove(lru);
+                    return lru;
+                }
+                public boolean empty(){
+                    return size == 0;
+                }
+            }
+
+            Map&lt;Integer, Node&gt; map = new HashMap&lt;&gt;();
+            Map&lt;Integer, LRUList&gt; freqlist = new HashMap&lt;&gt;();
+            int capacity, minfreq;
+
+            public LFUCache(int capacity){
+                this.capacity = capacity;
+                this.minfreq = 0;
+            }
+
+            public int get(int key){
+                if(map.containsKey(key)){
+                    Node node = map.get(key);
+                    updateFreq(node);
+                    return node.val;
+                }
+                else return -1;
+            }
+
+            public void put(int key, int val){
+                if (capacity == 0) return;
+                if(map.containsKey(key)){
+                    Node node = map.get(key);
+                    node.val = val;
+                    updateFreq(node);
+                    return;
+                }
+                else if(map.size() &gt;= capacity){
+                    LRUList minLRU = freqlist.get(minfreq);
+                    Node lruNode = minLRU.removeLRU();
+                    map.remove(lruNode.key);
+                }
+                Node node = new Node(key, val);
+                map.put(key, node);
+                freqlist.computeIfAbsent(1, k -&gt; new LRUList()).insert(node);
+                minfreq = 1;
+            }
+
+            public void updateFreq(Node node){
+                int f = node.freq;
+                LRUList oldList = freqlist.get(f);
+                oldList.remove(node);
+                if(f == minfreq &amp;&amp; oldList.empty()) minfreq++;
+                node.freq++;
+                freqlist.computeIfAbsent(node.freq, k -&gt; new LRUList()).insert(node);
+            }
+        }
+
+
+                </code>
+            </pre>
+        </section>
+
+        <section id="minstack" class="bg-gray-800 p-4 rounded-xl shadow w-full">
+            <h2 class="text-xl font-semibold mb-2 text-cyan-400">🔍 Min stack</h2>
+            <pre class="overflow-auto" class="language-java">
+                <code class="text-sm text-white language-java">
+                    class MinStack{
+                        Stack&lt;Long&gt; stack = new Stack&lt;&gt;();
+                        long mini;
+                        MinStack(){
+                            this.mini = Long.MAX_VALUE;
+                        }
+                        public void push(long val){
+                            if(stack.isEmpty()){
+                                stack.push(val);
+                                mini = val;
+                            } 
+                            else{
+                                if(val &lt; mini){
+                                    stack.push((2*val) - mini);
+                                    mini = val;
+                                }
+                                else{
+                                    stack.push(val);
+                                }
+                            }
+                        }
+
+                        public void pop(){
+                            if(stack.isEmpty()) return;
+                            else{
+                                Long val = stack.pop();
+                                if(val &lt; mini){
+                                    mini = (2*mini) - val;
+                                }
+                            }
+                        }
+
+                        public long top(){
+                            if(stack.isEmpty()) return -1;
+                            else{
+                                Long val = stack.peek();
+                                if(val &lt; mini){
+                                    return mini;
+                                }
+                                return val;
+                            }
+                        }
+
+                        public long getMin(){
+                            return mini;
+                        }
+                    }
+
+                </code>
+            </pre>
+        </section>
+
+
+        
+
+
+    </main>
+
+    <footer class="text-center py-4 text-gray-500 text-sm border-t border-gray-700">
+        &copy; 2025 Harshit Harlalka. All rights reserved.
+  </footer>
+</body>
+</html>
